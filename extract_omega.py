@@ -62,4 +62,6 @@ if __name__ == "__main__":
 
 
     plt.legend(d)
+    plt.xlabel(r"$k_y$")
+    plt.ylabel(r"$\gamma$")
     plt.show()

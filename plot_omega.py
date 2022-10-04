@@ -5,6 +5,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from ql_fluxes import get_latest_omega, read_omega
 
+from itertools import cycle
+
+prop_cycle = plt.rcParams['axes.prop_cycle']
+colors = cycle(prop_cycle.by_key()['color'])
 
 def omega_from_dir(dirname, usemy = True):
     tmp = os.getcwd()
@@ -39,21 +43,17 @@ if __name__ == "__main__":
 
     fig, axes =plt.subplots(2,sharex=True)
     for d in dirs:
+        color = next(colors)
         ky, omega, gamma = omega_from_dir(d)
-        axes[0].plot(ky, omega)
-        axes[1].plot(ky, gamma)
+        axes[0].plot(ky, omega, color = color)
+        axes[1].plot(ky, gamma, color = color)
         axes[1].set_xlabel(r"$k_y \rho$")
         axes[0].set_ylabel(r"$\omega$")
         axes[1].set_ylabel(r"$\gamma$")
         imax = np.argmax(gamma)
-        axes[0].plot(ky, omega)
-        axes[1].plot(ky, gamma)
         axes[0].plot(ky[imax], omega[imax],marker='x',label='_nolegend_',color='k')
         axes[1].plot(ky[imax], gamma[imax],marker='x',label='_nolegend_',color='k')
         
-        axes[1].set_xlabel(r"$k_y \rho$")
-        axes[0].set_ylabel(r"$\omega$")
-        axes[1].set_ylabel(r"$\gamma$")
     axes[1].set_ylim(bottom=0.0)
     axes[0].legend(dirs)    
     plt.show()
