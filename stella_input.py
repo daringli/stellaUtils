@@ -513,3 +513,66 @@ class Stella_input(object):
 
 
     
+    def alpha0(self):
+        return self.get_value_from_input_or_defaults("vmec_parameters","alpha0")
+
+    @alpha0.setter
+    def alpha0(self,val):
+        self.changevar("vmec_parameters","alpha0",val)
+
+    @property
+    def torflux(self):
+        return self.get_value_from_input_or_defaults("vmec_parameters","torflux")
+
+    @torflux.setter
+    def torflux(self,val):
+        self.changevar("vmec_parameters","torflux",val)
+
+    @property
+    def zeta_center(self):
+        return self.get_value_from_input_or_defaults("vmec_parameters","zeta_center")
+
+    @zeta_center.setter
+    def zeta_center(self,val):
+        self.changevar("vmec_parameters","zeta_center",val)
+
+
+    @property
+    def ginit_option(self):
+        return self.get_value_from_input_or_defaults("init_g_knobs","ginit_option")
+
+    @ginit_option.setter
+    def ginit_option(self,val):
+        self.changevar("init_g_knobs","ginit_option",val)
+
+    @property
+    def chop_side(self):
+        return self.get_value_from_input_or_defaults("init_g_knobs","chop_side")
+
+    @chop_side.setter
+    def chop_side(self,val):
+        self.changevar("init_g_knobs","chop_side",val)
+
+    @property
+    def phiinit(self):
+        return self.get_value_from_input_or_defaults("init_g_knobs","phiinit")
+
+    @phiinit.setter
+    def phiinit(self,val):
+        self.changevar("init_g_knobs","phiinit",val)
+
+    @property
+    def restart_file(self):
+        return self.get_value_from_input_or_defaults("init_g_knobs","restart_file")
+
+    @restart_file.setter
+    def restart_file(self,val):
+        self.changevar("init_g_knobs","restart_file",val)
+
+    @property
+    def width0(self):
+        return self.get_value_from_input_or_defaults("init_g_knobs","width0")
+
+    @width0.setter
+    def width0(self,val):
+        self.changevar("init_g_knobs","width0",val)

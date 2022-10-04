@@ -11,13 +11,26 @@ import numpy as np
 
 import sys
 
+<<<<<<< HEAD
+=======
+BIGNUM = 1e200
+>>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
 
 with netcdf.netcdf_file('stella.out.nc','r',mmap=False) as f:
     phi2_vs_kxky  = f.variables['phi2_vs_kxky'][()]
     ky = f.variables['ky'][()]
     kx = f.variables['kx'][()]
     t = f.variables['t'][()]
+<<<<<<< HEAD
 
+=======
+    # remove inf parts of phi2
+    iinf = np.where(phi2_vs_kxky > BIGNUM)[0]
+    if len(iinf) > 0:
+        t = t[:iinf[0]]
+        phi2_vs_kxky = phi2_vs_kxky[:iinf[0]]
+    
+>>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
 lines = []
 gamma = np.zeros_like(ky)
 def onclick(event):

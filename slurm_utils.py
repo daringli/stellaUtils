@@ -5,7 +5,11 @@ import os
 from shutil import copy
 
 import numpy as np
+<<<<<<< HEAD
 from glob import glob
+=======
+
+>>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
 
 # stdout file is out.<job ID>
 stdout_prefix = "out."
@@ -24,7 +28,12 @@ def getLatestJobIDInDir(dirname):
         return maybeJobID
 
     # look for past jobs
+<<<<<<< HEAD
     filenames = sorted(glob(dirname + "/out.*")) # list of .out files.
+=======
+    tmp = subprocess.run("ls " + dirname + " | grep out.", shell=True, capture_output=True, text=True) # list of .out files.
+    filenames = tmp.stdout.split()
+>>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
     if len(filenames) > 0:
         ids = [int(fn.rsplit(".",1)[-1]) for fn in filenames]
         ids.sort()
@@ -62,12 +71,21 @@ class ErrOut(object):
     ErrOut(jobID).status()"""
 
 
+<<<<<<< HEAD
     donestring = "ELAPSED TIME" #presence in stdout indicates job finished.
     oomstring = "oom-kill"
     maybeoomstring = "killed"
     timestring = "time limit" # presence in stderr indicates time limit killed
     vmecfail = "ARNORM OR AZNORM EQUAL ZERO IN BCOVAR" # vmec fails and stella goes on
     
+=======
+    donestring = "elapsed time" #presence in stdout indicates job finished.
+    oomstring = "oom-kill"
+    maybeoomstring = "killed"
+    timestring = "time limit" # presence in stderr indicates time limit killed
+
+
+>>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
     def __init__(self,dirname,jobID=None):
         self.dirname = dirname
         if jobID is None:
@@ -75,7 +93,14 @@ class ErrOut(object):
         else:
             self.jobID = jobID
         
+<<<<<<< HEAD
         
+=======
+        if self.jobID is not None:
+            if not os.path.isfile(self.stdout):
+                raise ValueError("Output does not exist")
+    
+>>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
     @property
     def jobID(self):
         return self._jobID
@@ -93,15 +118,24 @@ class ErrOut(object):
 
     @property
     def status(self):
+<<<<<<< HEAD
         if self.stdout is not None and os.path.isfile(self.stdout):
+=======
+        if self.stdout is not None:
+>>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
             with open(self.stdout,'r') as f:
                 out = f.read()
             with open(self.stderr,'r') as f:
                 err = f.read()
             if ErrOut.donestring in out:
                 status = "DONE"
+<<<<<<< HEAD
             elif ErrOut.vmecfail in out:
                 status = "VMECFAIL"
+=======
+            elif (len(err) == 0) and (len(out) > 0):
+                status= "RUNNING"
+>>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
             elif ErrOut.oomstring in err.lower():
                 status = "OOM"
             elif ErrOut.timestring in err.lower():
@@ -109,6 +143,7 @@ class ErrOut(object):
             elif ErrOut.maybeoomstring in err.lower():
                 # sometimes OOM results in a different error message
                 status = "OOM"
+<<<<<<< HEAD
             elif (len(out) > 0):
                 status= "RUNNING"
             else:
@@ -119,6 +154,11 @@ class ErrOut(object):
             status = "QUEUED"
         else:
             print("somethings odd. no queued job yet no output.")
+=======
+            else:
+                status = None
+        else:
+>>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
             status = None
         return status
 
