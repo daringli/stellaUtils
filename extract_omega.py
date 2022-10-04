@@ -32,12 +32,23 @@ def get_gamma_from_dir(dirname,tfit=80.0):
 
     gamma = []
     phi2s = np.transpose(phi2_vs_kxky[:,0,:])
-    for phi2 in phi2s:
-        i  = (np.abs(t-tfit)).argmin()
-        y  = np.log(phi2[i:])
-        x = t[i:]
-        coefs = np.polyfit(x,y,1,full=False)
-        gamma.append(coefs[0]/2)
+    for iky, phi2 in enumerate(phi2s):
+        i  = (np.abs(t-clicked_t)).argmin()
+        iinf = np.where(phi2 > BIGNUM)[0]
+        if len(iinf) > 0:
+            y  = np.log(phi2[i:iinf[0]])
+            x = t[i:iinf[0]]
+        else:
+            y  = np.log(phi2[i:])
+            x = t[i:]
+        N = np.count_nonzero(~np.isnan(y))
+        if N >= 3:
+            coefs0 = np.polyfit(x,y,1,full=False)[0]
+        else:
+            # no growth rate defined
+            print("Warning: no growth rate for iky = " + str(iky))
+            coefs0 = np.nan
+        gamma.append(coefs0/2)
     gamma = np.array(gamma)
     np.save('my_growthrate.npy',gamma)
     np.save('my_ky.npy',ky)

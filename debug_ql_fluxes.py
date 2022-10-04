@@ -138,20 +138,36 @@ if __name__ == "__main__":
         delzed = np.diff(zed)
         dl_over_b = jacob[:,0] * delzed[0]
         print(np.sum(dl_over_b)) # should be roughly resolution independent
+
+        Qql = energy_flux[1:,0]/phi2_vs_kxky[:,0]/ky**2
+        Gammazql = impurity_flux[1:,0]/phi2_vs_kxky[:,0]/nzed/ky**2
+        Qqlsum = np.sum(np.nan_to_num(Qql))
+        Gammazqlsum = np.sum(np.nan_to_num(Gammazql))
         axes[0].plot(ky, impurity_flux[1:,0])
-        axes[1].plot(ky,Imomega_avg)
+        axes[1].plot(ky, Qql)
         axes[2].plot(ky,phi2_vs_kxky[:,0])
-        axes[3].plot(ky,np.sqrt(Ky2[:,0]))
+        axes[3].plot(ky,Gammazql)
         axes[4].plot(ky,impurity_flux[1:,0]/phi2_vs_kxky[:,0]/nzed)
 
+        print("sum Q, sum Gammaz, ratio")
+        print(Qqlsum) # should be roughly resolution independent
+        print(Gammazqlsum) # should be roughly resolution independent
+        print(Gammazqlsum/Qqlsum) # should be roughly resolution independent
+        
 
-        axes[-1].set_xlabel(r"$k_y \rho$")
+
+        axes[-1].set_xlabel(r"$\gamma$")
         axes[0].set_ylabel(r"raw $\Gamma_z$")
-        axes[1].set_ylabel(r"$\gamma$")
+        axes[1].set_ylabel(r"raw $Q$ over $<|\varphi^2|>$ over $k_y$")
         axes[2].set_ylabel(r"$<|\varphi^2|>$")
-        axes[3].set_ylabel(r"$k_y$")
+        axes[3].set_ylabel(r"raw $\Gamma_z$ over $<|\varphi^2|>$ over $k_y$")
         axes[4].set_ylabel(r"raw $\Gamma_z$ over $<|\varphi^2|>$")
         
+        axes[1].axhline(0,color='silver',linestyle='dotted')
+        axes[3].axhline(0,color='silver',linestyle='dotted')
+        axes[4].axhline(0,color='silver',linestyle='dotted')
+        
+
         #axes[0].set_ylim([-0.01,1e8])
         #axes[2].set_ylim([-0.01,1e8])        
         #axes[4].set_ylim([-0.01,0.04])
