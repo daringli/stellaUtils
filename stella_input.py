@@ -512,7 +512,7 @@ class Stella_input(object):
         self.changevar("kt_grids_range_parameters","aky_max",val)
 
 
-    
+    @property
     def alpha0(self):
         return self.get_value_from_input_or_defaults("vmec_parameters","alpha0")
 
