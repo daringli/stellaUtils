@@ -19,18 +19,15 @@ if __name__ == "__main__":
     fig, axes =plt.subplots(2,sharex=True)
     for d in dirs:
         ky, omega, gamma = omega_from_dir(d)
-<<<<<<< HEAD
         if len(gamma.shape) > 1:
             if gamma.shape[1] == 1:
                 gamma = gamma[:,0]
         print(ky.shape)
         print(gamma.shape)
         print((gamma/ky**2).shape)
-=======
         print(ky.shape)
         print(gamma.shape)
         
->>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
         axes[0].plot(ky, gamma)
         axes[1].plot(ky, gamma/ky**2)
         axes[-1].set_xlabel(r"$k_y \rho$")

@@ -40,13 +40,11 @@ if __name__ == "__main__":
     fig, axes =plt.subplots(2,sharex=True)
     for d in dirs:
         ky, omega, gamma = omega_from_dir(d)
-<<<<<<< HEAD
         axes[0].plot(ky, omega)
         axes[1].plot(ky, gamma)
         axes[1].set_xlabel(r"$k_y \rho$")
         axes[0].set_ylabel(r"$\omega$")
         axes[1].set_ylabel(r"$\gamma$")
-=======
         imax = np.argmax(gamma)
         axes[0].plot(ky, omega)
         axes[1].plot(ky, gamma)
@@ -56,8 +54,6 @@ if __name__ == "__main__":
         axes[1].set_xlabel(r"$k_y \rho$")
         axes[0].set_ylabel(r"$\omega$")
         axes[1].set_ylabel(r"$\gamma$")
-    axes[0].set_ylim(bottom=0.0)
->>>>>>> 3fb6fbc10cc8dc1c280b62e4fdd31cb99437c535
     axes[1].set_ylim(bottom=0.0)
     axes[0].legend(dirs)    
     plt.show()
