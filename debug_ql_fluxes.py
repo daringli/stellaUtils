@@ -149,7 +149,7 @@ if __name__ == "__main__":
         axes[3].plot(ky,Gammazql)
         axes[4].plot(ky,impurity_flux[1:,0]/phi2_vs_kxky[:,0]/nzed)
 
-        print("sum Q, sum Gammaz, ratio")
+        print("sum Q, sum Gammaz, sumGammaz/sumQ ratio")
         print(Qqlsum) # should be roughly resolution independent
         print(Gammazqlsum) # should be roughly resolution independent
         print(Gammazqlsum/Qqlsum) # should be roughly resolution independent

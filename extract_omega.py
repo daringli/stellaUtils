@@ -24,16 +24,11 @@ def get_gamma_from_dir(dirname,tfit=80.0):
         ky = f.variables['ky'][()]
         kx = f.variables['kx'][()]
         t = f.variables['t'][()]
-        # remove inf parts of phi2
-        iinf = np.where(phi2_vs_kxky > BIGNUM)[0]
-        if len(iinf) > 0:
-            t = t[:iinf[0]]
-            phi2_vs_kxky = phi2_vs_kxky[:iinf[0]]
-
+        
     gamma = []
     phi2s = np.transpose(phi2_vs_kxky[:,0,:])
     for iky, phi2 in enumerate(phi2s):
-        i  = (np.abs(t-clicked_t)).argmin()
+        i  = (np.abs(t-tfit)).argmin()
         iinf = np.where(phi2 > BIGNUM)[0]
         if len(iinf) > 0:
             y  = np.log(phi2[i:iinf[0]])
