@@ -62,7 +62,7 @@ if __name__ == "__main__":
         d = argv[2:]
 
     for dirname in d:
-        print(d)
+        print(dirname)
         ky,gamma = get_gamma_from_dir(dirname,tfit=t)
         plt.plot(ky,gamma)
 

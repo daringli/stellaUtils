@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 import os
 
 def read_omega(filename = "stella.omega"):
+
+    print(os.getcwd())
+
     with open(filename,'r') as f:
         lines = f.readlines()
 

@@ -13,7 +13,11 @@ from stella_input import Stella_input
 from scipy.signal import find_peaks
 
 import sys
+import os
 
+#path = os.path.abspath(__file__)
+#thisdir = path.split('/')[-2]
+thisdir = os.getcwd().split('/')[-1]
 
 with netcdf.netcdf_file('stella.out.nc','r',mmap=False) as f:
     # phi_vs_t(t, tube, zed, kx, ky, ri)
@@ -27,7 +31,7 @@ with netcdf.netcdf_file('stella.out.nc','r',mmap=False) as f:
     kx = f.variables['kx'][()]
     z = f.variables['zed'][()]
     kperp2 = f.variables['kperp2'][()]
-    kperp2 = kperp2[:,0,0,:]
+    kperp2 = kperp2[:,0,0,:] #kperp2(zed, alpha, kx, ky)
 
 nfield_periods = Stella_input('.').nfield_periods
 z = z * nfield_periods
@@ -59,7 +63,7 @@ if len(kx) == 1:
 
     axes[-1].set_xlabel(r"$z$")
     axes[0].set_ylabel(r"$|\phi|_k^2/\rm{max}(|\phi|_k^2)$")
-    axes[1].set_ylabel(r"$k_{\perp}^2$")
+    axes[1].set_ylabel(r"$k_{\perp}^2/k_y^2$")
     axes[2].set_ylabel(r"$|\phi|_k^2 k_{\perp}^2$")
     norm = mpl.colors.Normalize(vmin=ky[0], vmax=ky[-1])
     divider = make_axes_locatable(axes[0])
@@ -83,6 +87,6 @@ if len(kx) == 1:
     cax2.set_title(r'$k_y \rho$')
     
     if len(sys.argv) > 1:
-        plt.savefig("kperp2.png")
+        plt.savefig("kperp2_" + thisdir +".png", dpi=300)
     else:
         plt.show()
