@@ -467,6 +467,17 @@ class Stella_input(object):
         self.changevar("vmec_parameters","nfield_periods",val)
 
 
+    
+    @property
+    def nperiod(self):
+        return self.get_value_from_input_or_defaults("zgrid_parameters","nperiod")
+
+    @nperiod.setter
+    def nperiod(self,val):
+        self.changevar("zgrid_parameters","nperiod",val)
+
+
+        
     @property
     def vmec_filename(self):
         return self.get_value_from_input_or_defaults("vmec_parameters","vmec_filename")

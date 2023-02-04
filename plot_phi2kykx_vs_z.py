@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from scipy.io import netcdf
+from netcdf_util import netcdf_file
+
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -13,7 +14,7 @@ from stella_input import Stella_input
 
 
 
-with netcdf.netcdf_file('stella.out.nc','r',mmap=False) as f:
+with netcdf_file('stella.out.nc','r',mmap=False) as f:
     # phi_vs_t(t, tube, zed, kx, ky, ri)
     phi = f.variables['phi_vs_t'][()]
     print(phi.shape)

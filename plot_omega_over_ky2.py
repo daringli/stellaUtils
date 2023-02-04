@@ -70,12 +70,16 @@ if __name__ == "__main__":
     else:
         dirs = ['.']
 
-
+    exclude_dirs = []
     
-    fig, axes =plt.subplots(4,sharex=True)
+    fig, axes =plt.subplots(2,sharex=True)
     for d in dirs:
-
-        print(d)
+        try:
+            ky, omega, gamma = omega_from_dir(d)
+        except FileNotFoundError:
+            exclude_dirs.append(d)
+            continue
+        
         FSAkperp2, FSA2kperp2 = get_FSAkperp2(d)
 
         if np.any(np.isnan(FSAkperp2)):
@@ -86,6 +90,16 @@ if __name__ == "__main__":
             if len(gamma.shape) > 1:
                 if gamma.shape[1] == 1:
                     gamma = gamma[:,0]
+
+            
+        if len(gamma.shape) > 1:
+            if gamma.shape[1] == 1:
+                gamma = gamma[:,0]
+        print(ky.shape)
+        print(gamma.shape)
+        print((gamma/ky**2).shape)
+        print(ky.shape)
+        print(gamma.shape)
         
         print(ky)
         print(gamma)
@@ -108,7 +122,16 @@ if __name__ == "__main__":
     axes[2].set_ylim(bottom=0.0)
     axes[3].set_ylim(bottom=0.0)
     
-    axes[1].legend(dirs)    
 
+    i = 0
+    N = len(dirs)
+    for j in range(N):
+        if dirs[i] in exclude_dirs:
+            del dirs[i]
+            i = i - 1
+        i = i + 1
+    
+    axes[0].legend(dirs)    
     axes[0].set_title("$STELLAUTILS/" + thisfile + ", run from: " + thisdir)
+
     plt.show()
