@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from scipy.io import netcdf
+from netcdf_util import netcdf_file
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -15,11 +15,18 @@ BIGNUM = 1e200
 
 def get_gamma_from_dir(dirname,tfit=80.0):
 
+    filename = 'stella.out.nc'
+    
     tmp = os.getcwd()
 
     os.chdir(dirname)
 
-    with netcdf.netcdf_file('stella.out.nc','r',mmap=False) as f:
+    if not os.path.isfile(filename):
+        print("No output found in '" + dirname + "'.")
+        os.chdir(tmp)
+        return np.nan, np.nan
+    
+    with netcdf_file(filename,'r',mmap=False) as f:
         phi2_vs_kxky  = f.variables['phi2_vs_kxky'][()]
         ky = f.variables['ky'][()]
         kx = f.variables['kx'][()]
@@ -61,12 +68,24 @@ if __name__ == "__main__":
         t = float(argv[1])
         d = argv[2:]
 
+
+    exclude_dirs = []
     for dirname in d:
-        print(d)
+        print(dirname)
         ky,gamma = get_gamma_from_dir(dirname,tfit=t)
-        plt.plot(ky,gamma)
+        if np.all(np.isnan(ky)):
+            exclude_dirs.append(dirname)
+        else:
+            plt.plot(ky,gamma)
 
-
+    i = 0
+    N = len(d)
+    for j in range(N):
+        if d[i] in exclude_dirs:
+            del d[i]
+            i = i - 1
+        i = i + 1
+    print(d)
     plt.legend(d)
     plt.xlabel(r"$k_y$")
     plt.ylabel(r"$\gamma$")

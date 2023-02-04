@@ -5,7 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from ql_fluxes import get_latest_omega, read_omega
 from plot_omega import omega_from_dir
-    
+
+from new_kperp2 import get_kperp2
+
 if __name__ == "__main__":
     import sys
     argv = sys.argv
@@ -16,6 +18,9 @@ if __name__ == "__main__":
         dirs = ['.']
 
     exclude_dirs = []
+
+    tmp = os.getcwd()
+    
     
     fig, axes =plt.subplots(2,sharex=True)
     for d in dirs:
@@ -23,22 +28,19 @@ if __name__ == "__main__":
             ky, omega, gamma = omega_from_dir(d)
         except FileNotFoundError:
             exclude_dirs.append(d)
+            print(d)
+            os.chdir(tmp)
             continue
-            
+        kperp2 = get_kperp2(d)
         if len(gamma.shape) > 1:
             if gamma.shape[1] == 1:
                 gamma = gamma[:,0]
-        print(ky.shape)
-        print(gamma.shape)
-        print((gamma/ky**2).shape)
-        print(ky.shape)
-        print(gamma.shape)
         
         axes[0].plot(ky, gamma)
-        axes[1].plot(ky, gamma/ky**2)
-        axes[-1].set_xlabel(r"$k_y \rho$")
+        axes[1].plot(ky, gamma/kperp2)
+        axes[-1].set_xlabel(r"$k_y$")
         axes[0].set_ylabel(r"$\gamma$")
-        axes[1].set_ylabel(r"$\gamma/k_y^2$")
+        axes[1].set_ylabel(r"$\gamma/<k_{\perp}^2>$")
     axes[1].set_ylim(bottom=0.0)
     axes[0].set_ylim(bottom=0.0)
 

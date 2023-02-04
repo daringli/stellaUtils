@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import numpy as np
-from scipy.io import netcdf
+from netcdf_util import netcdf_file
 import matplotlib.pyplot as plt
 import os
 
@@ -92,7 +92,7 @@ def ql_flux_from_dir(dirname, average_from = None):
 
     Nky = len(ky)
     Nkx = len(kx)
-    with netcdf.netcdf_file('stella.out.nc','r',mmap=False) as f:
+    with netcdf_file('stella.out.nc','r',mmap=False) as f:
         if average_from is not None:
             t = f.variables['t'][()]
             i = np.where(t>=average_from)[0][0]
