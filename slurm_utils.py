@@ -24,9 +24,7 @@ def getLatestJobIDInDir(dirname):
         return maybeJobID
 
     # look for past jobs
-    #    filenames = sorted(glob(dirname + "/out.*")) # list of .out files.
-    tmp = subprocess.run("ls " + dirname + " | grep out.", shell=True, capture_output=True, text=True) # list of .out files.
-    filenames = tmp.stdout.split()
+    filenames = sorted(glob(dirname + "/out.*")) # list of .out files.
     if len(filenames) > 0:
         ids = [int(fn.rsplit(".",1)[-1]) for fn in filenames]
         ids.sort()
@@ -63,12 +61,16 @@ class ErrOut(object):
     Usage:
     ErrOut(jobID).status()"""
 
+
     donestring = "ELAPSED TIME" #presence in stdout indicates job finished.
     oomstring = "oom-kill"
     maybeoomstring = "killed"
     timestring = "time limit" # presence in stderr indicates time limit killed
     vmecfail = "ARNORM OR AZNORM EQUAL ZERO IN BCOVAR" # vmec fails and stella goes on
-    
+    stellafail_iota = "Error! Two methods for computing iota disagree." # stella failed
+    stellafail_0 = "0.000000000000 meters"
+    stellafail_inf = "Infinity Tesla"
+
     def __init__(self,dirname,jobID=None):
         self.dirname = dirname
         if jobID is None:
@@ -76,10 +78,7 @@ class ErrOut(object):
         else:
             self.jobID = jobID
         
-        if self.jobID is not None:
-            if not os.path.isfile(self.stdout):
-                raise ValueError("Output does not exist")
-    
+        
     @property
     def jobID(self):
         return self._jobID
@@ -102,12 +101,13 @@ class ErrOut(object):
                 out = f.read()
             with open(self.stderr,'r') as f:
                 err = f.read()
-            if ErrOut.donestring in out:
-                status = "DONE"
-            elif ErrOut.vmecfail in out:
+
+            if ErrOut.vmecfail in out:
                 status = "VMECFAIL"
-            elif (len(err) == 0) and (len(out) > 0):
-                status= "RUNNING"
+            elif (ErrOut.stellafail_iota  in out) or (ErrOut.stellafail_0  in out) or (ErrOut.stellafail_inf in out):
+                status = "STELLAFAIL"
+            elif ErrOut.donestring in out:
+                status = "DONE"
             elif ErrOut.oomstring in err.lower():
                 status = "OOM"
             elif ErrOut.timestring in err.lower():
@@ -139,7 +139,7 @@ def squeue(u="sbul",j=None):
 
 def scancel(u="sbul",j=None):
     if j is not None:
-        tmp = subprocess.run(["scancel","-j",j], capture_output=True, text=True)
+        tmp = subprocess.run(["scancel",j], capture_output=True, text=True)
     else:
         tmp = subprocess.run(["scancel","-u",u], capture_output=True, text=True)
     return tmp.stdout
@@ -170,3 +170,14 @@ def copyInput(dirname,newdirname):
         os.makedirs(newdirname)
         copy(dirname + "/" + inputfile, newdirname)
         copy(dirname + "/" + jobfile, newdirname)
+
+
+if __name__ == "__main__":
+    "Print the status of the job in a directory."
+    import sys
+    argc = len(sys.argv)
+    if argc > 1:
+        dirname = sys.argv[1]
+    else:
+        dirname = '.'
+    status = ErrOut(dirname).status
