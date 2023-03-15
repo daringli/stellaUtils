@@ -65,11 +65,17 @@ class ErrOut(object):
     donestring = "ELAPSED TIME" #presence in stdout indicates job finished.
     oomstring = "oom-kill"
     maybeoomstring = "killed"
+    cancelledstring = " CANCELLED AT "
+    cancelledstring2 = "Job step aborted"
     timestring = "time limit" # presence in stderr indicates time limit killed
     vmecfail = "ARNORM OR AZNORM EQUAL ZERO IN BCOVAR" # vmec fails and stella goes on
+    vmecfailIter = "Try increasing NITER"
+    vmecDone = "EXECUTION TERMINATED NORMALLY"
     stellafail_iota = "Error! Two methods for computing iota disagree." # stella failed
     stellafail_0 = "0.000000000000 meters"
     stellafail_inf = "Infinity Tesla"
+    steplimit = "Step limit reached for this job"
+
 
     def __init__(self,dirname,jobID=None):
         self.dirname = dirname
@@ -97,17 +103,26 @@ class ErrOut(object):
     @property
     def status(self):
         if self.stdout is not None and os.path.isfile(self.stdout):
-            with open(self.stdout,'r') as f:
-                out = f.read()
-            with open(self.stderr,'r') as f:
-                err = f.read()
+            try:
+                with open(self.stdout,'r') as f:
+                    out = f.read()
+                with open(self.stderr,'r') as f:
+                    err = f.read()
+            except:
+                print("This should never happen, but I swear it happened once so I'm ready now")
+                print(self.stdout,flush=True)
+                print(self.stderr,flush=True)
+                raise ValueError("This should never happen. " + self.stdout + " " + self.stderr)
+                
 
-            if ErrOut.vmecfail in out:
+            if (ErrOut.vmecfail in out) or (ErrOut.vmecfailIter in out):
                 status = "VMECFAIL"
-            elif (ErrOut.stellafail_iota  in out) or (ErrOut.stellafail_0  in out) or (ErrOut.stellafail_inf in out):
-                status = "STELLAFAIL"
             elif ErrOut.donestring in out:
                 status = "DONE"
+            elif (ErrOut.stellafail_iota  in out) or (ErrOut.stellafail_0  in out) or (ErrOut.stellafail_inf in out):
+                status = "STELLAFAIL"
+            elif ErrOut.steplimit in err:
+                status = "STEPLIMIT"
             elif ErrOut.oomstring in err.lower():
                 status = "OOM"
             elif ErrOut.timestring in err.lower():
@@ -115,29 +130,32 @@ class ErrOut(object):
             elif ErrOut.maybeoomstring in err.lower():
                 # sometimes OOM results in a different error message
                 status = "OOM"
+            elif (ErrOut.cancelledstring in err) or (ErrOut.cancelledstring2 in err):
+                status = "CANCELLED"
+            elif ErrOut.vmecDone in out:
+                status = "VMECDONE"
             elif (len(out) > 0):
                 status= "RUNNING"
             else:
-                print("somethings odd. status None for stdout:")
+                print("somethings odd. Unknown status:")
                 print(self.stdout)
                 status = None
         elif jobQueuedInDir(self.dirname) is not None:
             status = "QUEUED"
         else:
-            print("somethings odd. no queued job yet no output.")
-            status = None
+            status = "NOOUT"
         return status
 
 
 
-def squeue(u="sbul",j=None):
+def squeue(u=username,j=None):
     if j is not None:
         tmp = subprocess.run(["squeue","-j",j], capture_output=True, text=True)
     else:
         tmp = subprocess.run(["squeue","-u",u], capture_output=True, text=True)
     return tmp.stdout
 
-def scancel(u="sbul",j=None):
+def scancel(u=username,j=None):
     if j is not None:
         tmp = subprocess.run(["scancel",j], capture_output=True, text=True)
     else:
