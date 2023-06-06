@@ -45,11 +45,13 @@ if __name__ == "__main__":
     for d in dirs:
         color = next(colors)
         ky, omega, gamma = omega_from_dir(d)
+        if len(gamma.shape) == 2:
+            gamma = gamma[0]
         axes[0].plot(ky, omega, color = color)
         axes[1].plot(ky, gamma, color = color)
         axes[1].set_xlabel(r"$k_y \rho$")
-        axes[0].set_ylabel(r"$\omega$")
-        axes[1].set_ylabel(r"$\gamma$")
+        axes[0].set_ylabel(r"$\omega/[v_{Ti}/a]$")
+        axes[1].set_ylabel(r"$\gamma/[v_{Ti}/a]$")
         imax = np.argmax(gamma)
         axes[0].plot(ky[imax], omega[imax],marker='x',label='_nolegend_',color='k')
         axes[1].plot(ky[imax], gamma[imax],marker='x',label='_nolegend_',color='k')
