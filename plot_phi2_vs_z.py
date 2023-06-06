@@ -1,23 +1,17 @@
 #!/usr/bin/env python
 
-from scipy.io import netcdf
+from netcdf_util import netcdf_file
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib import cm
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
-import os
 
 from stella_input import Stella_input
 
 def get_latest_phi2(dirname):
-    tmp = os.getcwd()
-    os.chdir(dirname)
-    
-
-
-    with netcdf.netcdf_file('stella.out.nc','r',mmap=False) as f:
+    with netcdf_file(dirname + '/stella.out.nc','r',mmap=False) as f:
         # phi_vs_t(t, tube, zed, kx, ky, ri)
         phi = f.variables['phi_vs_t'][()]
         print(phi.shape)
@@ -29,7 +23,6 @@ def get_latest_phi2(dirname):
         print(phi2_vs_z.shape)
 
         z = f.variables['zed'][()]
-    os.chdir(tmp)
     nfield_periods = Stella_input(dirname).nfield_periods
     return z * nfield_periods, phi2_vs_z
 
