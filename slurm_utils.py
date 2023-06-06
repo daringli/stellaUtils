@@ -39,8 +39,11 @@ def getQueuedJobDirs(u=username):
     tmp = out.split('\n')
     jobs = [t.split()[0] for t in tmp[1:-1]]
     for job in jobs:
+        job = job.split('_',1)[0] # needed to deal with jobarrays, which have the form jobID_arrayID
         command2 = 'scontrol show job ' + job + ' | grep WorkDir'
         result2 = subprocess.run(command2, shell=True, capture_output=True, text=True)
+        #print(result2)
+        #print(result2.stdout.split("=",1))
         dirs.append(result2.stdout.split("=",1)[1][:-1])
     return dirs,jobs
 
@@ -75,7 +78,7 @@ class ErrOut(object):
     stellafail_0 = "0.000000000000 meters"
     stellafail_inf = "Infinity Tesla"
     steplimit = "Step limit reached for this job"
-
+    completingerror = "srun: error: unable to create step for job 6588451: job/step already completing or completed"
 
     def __init__(self,dirname,jobID=None):
         self.dirname = dirname
@@ -125,7 +128,7 @@ class ErrOut(object):
                 status = "STEPLIMIT"
             elif ErrOut.oomstring in err.lower():
                 status = "OOM"
-            elif ErrOut.timestring in err.lower():
+            elif (ErrOut.timestring in err.lower()) or (ErrOut.completingerror in err.lower()):
                 status = "TIME"
             elif ErrOut.maybeoomstring in err.lower():
                 # sometimes OOM results in a different error message
