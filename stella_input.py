@@ -116,7 +116,9 @@ class Stella_input(object):
             "akx_min"           : 0.0       ,           # set these to be nonsense values so can check later if they've been set
             "akx_max"           : -1.0      ,           # set these to be nonsense values so can check later if they've been set
             "theta0_min"        : 0.0       ,           # set these to be nonsense values so can check later if they've been set
-            "theta0_max"        : -1.0      }           # set these to be nonsense values so can check later if they've been set
+            "theta0_max"        : -1.0      ,            # set these to be nonsense values so can check later if they've been set
+            "kyspacing_option"  : 'linear'  ,
+    }
 
     defaults["physics_flags"] = {
            "full_flux_surface"  :  False    ,\
@@ -179,6 +181,8 @@ class Stella_input(object):
            "driftkinetic_implicit" : False  ,\
            "mirror_semi_lagrange" : True    ,\
            "mirror_linear_interp" : False   ,\
+           "nstep"              : -1        ,\
+           "tend"               : -1.0      ,\
            "maxwellian_inside_zed_derivative" : False  ,\
            "stream_matrix_inversion" : False,\
            "rng_seed"           : -1        , # New parameter 17/12/2020  !negative values use current time as seed
@@ -504,6 +508,24 @@ class Stella_input(object):
     def nmu(self,val):
         self.changevar("vpamu_grids_parameters","nmu",val)
 
+    @property
+    def naky(self):
+        return self.get_value_from_input_or_defaults("kt_grids_range_parameters","naky")
+
+    @naky.setter
+    def naky(self,val):
+        self.changevar("kt_grids_range_parameters","naky",val)
+
+    
+    @property
+    def nakx(self):
+        return self.get_value_from_input_or_defaults("kt_grids_range_parameters","nakx")
+
+    @nakx.setter
+    def nakx(self,val):
+        self.changevar("kt_grids_range_parameters","nakx",val)
+
+
     
     @property
     def aky_min(self):
@@ -587,3 +609,12 @@ class Stella_input(object):
     @width0.setter
     def width0(self,val):
         self.changevar("init_g_knobs","width0",val)
+
+
+    @property
+    def save_for_restart(self):
+        return self.get_value_from_input_or_defaults("stella_diagnostics_knobs","save_for_restart")
+
+    @save_for_restart.setter
+    def save_for_restart(self,val):
+        self.changevar("stella_diagnostics_knobs","save_for_restart",val)
