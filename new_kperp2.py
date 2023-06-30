@@ -32,14 +32,18 @@ def get_kperp2(dirname, override_ky = None):
             _ky = np.concatenate(([0.0], _ky, [_ky[-1] * 2]))
             tmp_zeros = np.zeros_like(phi2_vs_z[:,:,0])
             tmp_zeros = np.array([tmp_zeros])
-            print(tmp_zeros.shape)
+            #print(tmp_zeros.shape)
             tmp_zeros = np.transpose(tmp_zeros, axes= [1,2,0])
-            print(tmp_zeros.shape)
-            print(phi2_vs_z.shape)
+            #print(tmp_zeros.shape)
+            #print(phi2_vs_z.shape)
             phi2_vs_z = np.concatenate((tmp_zeros, phi2_vs_z , tmp_zeros), axis=2)
             ky = override_ky
             phi2_vs_z = interp1d(_ky,phi2_vs_z)(ky)
         kx = f.variables['kx'][()]
+        I = np.argsort(kx)
+        kx = kx[I]
+        #print(kx)
+        phi2_vs_z = phi2_vs_z[:,I,:]
         z = f.variables['zed'][()]
         #kperp2 = f.variables['kperp2'][()]
         #kperp2 = kperp2[:,0,0,:]

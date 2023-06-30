@@ -45,8 +45,16 @@ if __name__ == "__main__":
     for d in dirs:
         color = next(colors)
         ky, omega, gamma = omega_from_dir(d)
+
+        print(omega.shape)
+        print(gamma.shape)
+        print(ky.shape)
         if len(gamma.shape) == 2:
             gamma = gamma[0]
+        if len(omega.shape) == 2:
+            omega = omega[:,0]
+
+            
         axes[0].plot(ky, omega, color = color)
         axes[1].plot(ky, gamma, color = color)
         axes[1].set_xlabel(r"$k_y \rho$")
