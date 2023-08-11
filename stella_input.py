@@ -618,3 +618,87 @@ class Stella_input(object):
     @save_for_restart.setter
     def save_for_restart(self,val):
         self.changevar("stella_diagnostics_knobs","save_for_restart",val)
+
+    @property
+    def overwrite_bmag(self):
+        return self.get_value_from_input_or_defaults("geo_knobs","overwrite_bmag")
+
+    @overwrite_bmag.setter
+    def overwrite_bmag(self,val):
+        self.changevar("geo_knobs","overwrite_bmag",val)
+
+
+    @property
+    def overwrite_gradpar(self):
+        return self.get_value_from_input_or_defaults("geo_knobs","overwrite_gradpar")
+
+    @overwrite_gradpar.setter
+    def overwrite_gradpar(self,val):
+        self.changevar("geo_knobs","overwrite_gradpar",val)
+
+    @property
+    def overwrite_gds2(self):
+        return self.get_value_from_input_or_defaults("geo_knobs","overwrite_gds2")
+
+    @overwrite_gds2.setter
+    def overwrite_gds2(self,val):
+        self.changevar("geo_knobs","overwrite_gds2",val)
+
+    @property
+    def overwrite_gds21(self):
+        return self.get_value_from_input_or_defaults("geo_knobs","overwrite_gds21")
+
+    @overwrite_gds21.setter
+    def overwrite_gds21(self,val):
+        self.changevar("geo_knobs","overwrite_gds21",val)
+
+    @property
+    def overwrite_gds22(self):
+        return self.get_value_from_input_or_defaults("geo_knobs","overwrite_gds22")
+
+    @overwrite_gds22.setter
+    def overwrite_gds22(self,val):
+        self.changevar("geo_knobs","overwrite_gds22",val)
+
+    @property
+    def overwrite_gds23(self):
+        return self.get_value_from_input_or_defaults("geo_knobs","overwrite_gds23")
+
+    @overwrite_gds23.setter
+    def overwrite_gds23(self,val):
+        self.changevar("geo_knobs","overwrite_gds23",val)
+
+    @property
+    def overwrite_gds24(self):
+        return self.get_value_from_input_or_defaults("geo_knobs","overwrite_gds24")
+
+    @overwrite_gds24.setter
+    def overwrite_gds24(self,val):
+        self.changevar("geo_knobs","overwrite_gds24",val)
+
+    @property
+    def overwrite_gbdrift(self):
+        return self.get_value_from_input_or_defaults("geo_knobs","overwrite_gbdrift")
+
+    @overwrite_gbdrift.setter
+    def overwrite_gbdrift(self,val):
+        self.changevar("geo_knobs","overwrite_gbdrift",val)
+
+    @property
+    def overwrite_cvdrift(self):
+        return self.get_value_from_input_or_defaults("geo_knobs","overwrite_cvdrift")
+
+    @overwrite_cvdrift.setter
+    def overwrite_cvdrift(self,val):
+        self.changevar("geo_knobs","overwrite_cvdrift",val)
+
+    @property
+    def overwrite_gbdrift0(self):
+        return self.get_value_from_input_or_defaults("geo_knobs","overwrite_gbdrift0")
+
+    @overwrite_gbdrift0.setter
+    def overwrite_gbdrift0(self,val):
+        self.changevar("geo_knobs","overwrite_gbdrift0",val)
+
+    
+        
