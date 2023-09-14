@@ -526,7 +526,6 @@ class Stella_input(object):
         self.changevar("kt_grids_range_parameters","nakx",val)
 
 
-    
     @property
     def aky_min(self):
         return self.get_value_from_input_or_defaults("kt_grids_range_parameters","aky_min")
@@ -544,6 +543,25 @@ class Stella_input(object):
     def aky_max(self,val):
         self.changevar("kt_grids_range_parameters","aky_max",val)
 
+    
+    @property
+    def akx_min(self):
+        return self.get_value_from_input_or_defaults("kt_grids_range_parameters","akx_min")
+
+    @akx_min.setter
+    def akx_min(self,val):
+        self.changevar("kt_grids_range_parameters","akx_min",val)
+
+    
+    @property
+    def akx_max(self):
+        return self.get_value_from_input_or_defaults("kt_grids_range_parameters","akx_max")
+
+    @akx_max.setter
+    def akx_max(self,val):
+        self.changevar("kt_grids_range_parameters","akx_max",val)
+
+        
 
     @property
     def alpha0(self):
